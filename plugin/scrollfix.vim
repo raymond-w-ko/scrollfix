@@ -70,33 +70,57 @@ command!          FIXOFF    :let g:scrollfix=-1
 command! -nargs=1 FIX       :let g:scrollfix=<args>
 command! -nargs=1 SCROLLFIX :let g:scrollfix=<args>
 
-aug scrollfix
+augroup scrollfix
     au!
     au CursorMoved,CursorMovedI * :call ScrollFix()
-aug END
+augroup END
 
 function! ScrollFix()
-    if g:scrollfix<0 | return | endif
-    if &so!=0 | set so=0 | endif
+    if g:scrollfix < 0
+        return
+    endif
+    if &scrolloff != 0
+        set scrolloff = 0
+    endif
 
-    " keep cursor on fixed visual line of the window
+    let num_lines = winheight(0) 
+    let fixline = (num_lines * g:scrollfix) / 100
 
-    let fixline = ( winheight(0) * g:scrollfix ) / 100
+    " normal command approach, does not work with CursorMovedI
+    "let offset = (num_lines / 2) - fixline
+    "if offset > 0
+        "let jump = "\<C-E>"
+    "else
+        "let jump = "\<C-Y>"
+        "let offset = abs(offset)
+    "endif 
+    "let cmd = "normal! zz" . offset . jump
+    "exe cmd
 
-    let dict = winsaveview()
-    if dict['lnum'] <= fixline | return | endif
-    if dict['lnum'] - dict['topline'] + 1 == fixline | return | endif
-
-    " if eof line is visible and visual-line is >= fixline, don't fix cursor
+    " window option approach
+    let window = winsaveview()
+    if window['lnum'] <= fixline
+        return
+    endif
+    "" if eof line is visible and visual-line is >= fixline, don't fix cursor
     if g:fixeof
-        if line('$') < dict['topline'] + winheight(0) && dict['lnum'] >= fixline
+        if line('$') < window['topline'] + winheight(0) && window['lnum'] >= fixline
             return
         endif
     endif
 
-    let dict['topline'] = dict['lnum'] - fixline + 1
-    " let g:last = dict
-    call winrestview(dict)
+    let visual_top_line = window['lnum']
+    for i in range(fixline)
+        let visual_top_line -= 1
+        let fold_start = foldclosed(visual_top_line)
+        if fold_start >= 0
+            let visual_top_line = fold_start
+        endif
+    endfor
+    if visual_top_line != window['topline'] 
+        let window['topline'] = visual_top_line
+        call winrestview(window)
+    endif
 
     if g:scrollinfo 
         if !exists('b:fixline') || b:fixline != fixline
