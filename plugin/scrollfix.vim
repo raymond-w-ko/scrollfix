@@ -101,11 +101,11 @@ function! ScrollFix()
     if g:scrollinfo 
         if !exists('b:fixline') || b:fixline != fixline
             let b:fixline = fixline
-            let save_lz = &lazyredraw
-            set nolazyredraw
-            redraw
-            echo "scroll fixed at line " . b:fixline . " of " . winheight(0)." (". g:scrollfix "%)"
-            let &lazyredraw = save_lz
+            "let save_lz = &lazyredraw
+            "set nolazyredraw
+            "redraw
+            "echo "scroll fixed at line " . b:fixline . " of " . winheight(0)." (". g:scrollfix "%)"
+            "let &lazyredraw = save_lz
         endif
     endif
 endfunction
