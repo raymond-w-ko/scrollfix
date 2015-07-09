@@ -104,7 +104,7 @@ function! ScrollFix()
             "let save_lz = &lazyredraw
             "set nolazyredraw
             "redraw
-            "echo "scroll fixed at line " . b:fixline . " of " . winheight(0)." (". g:scrollfix "%)"
+            echo "scroll fixed at line " . b:fixline . " of " . winheight(0)." (". g:scrollfix "%)"
             "let &lazyredraw = save_lz
         endif
     endif
