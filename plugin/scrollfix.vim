@@ -80,7 +80,7 @@ function! ScrollFix()
         return
     endif
     if &scrolloff != 0
-        set scrolloff = 0
+        set scrolloff=0
     endif
 
     let num_lines = winheight(0) 
