@@ -110,13 +110,19 @@ function! ScrollFix()
     endif
 
     let visual_top_line = window['lnum']
-    for i in range(fixline)
+    while fixline > 0
+        if &wrap
+            let num_wrapped_lines = virtcol([visual_top_line, '$']) - 1
+            let fixline -= max([1, num_wrapped_lines / winwidth(0)])
+        else
+            let fixline -= 1
+        endif
         let visual_top_line -= 1
         let fold_start = foldclosed(visual_top_line)
         if fold_start >= 0
             let visual_top_line = fold_start
         endif
-    endfor
+    endwhile
     if visual_top_line != window['topline'] 
         let window['topline'] = visual_top_line
         call winrestview(window)
