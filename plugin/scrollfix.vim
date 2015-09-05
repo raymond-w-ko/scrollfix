@@ -11,7 +11,7 @@
 "
 " You choose the visual line of screen in percentages from top of
 " screen. For example, setting 100 mean lock cursor a bottom
-" line of screen, setting 0 mean keep cursor at top line of 
+" line of screen, setting 0 mean keep cursor at top line of
 " screen, setting 50 means middle line of screen, setting 60
 " (default) is about two-third from top of screen.
 " As shipped, cursor is at 60% (let g:scrollfix=60)
@@ -29,9 +29,9 @@
 "
 " NB:
 " - You need vim version at least 7.0.91 or later (vim6 won't work).
-"   If you have vim7 before 7.0.91, you can use script#1473 to build 
+"   If you have vim7 before 7.0.91, you can use script#1473 to build
 "   & install the latest vim7 executable.
-" - this is beta version of the scrollfix plugin. 
+" - this is beta version of the scrollfix plugin.
 "   Your feedback is welcome. Please send your feedback to iler at gmail dot com.
 "................................................................
 
@@ -57,7 +57,7 @@ endif
 " version check
 if v:version < 700 | finish | endif
 " if vim6, disable silently.
-" if version > 700, it will work. 
+" if version > 700, it will work.
 " if version == 700, we need the specific patch, explain and disable.
 if v:version == 700 && ! has('patch91')
     echohl ToDo
@@ -83,7 +83,18 @@ function! ScrollFix()
         set scrolloff=0
     endif
 
-    let num_lines = winheight(0) 
+    " this is usually very small, around 5 lines, so centering it and wasting
+    " space is not desirable
+    if getcmdwintype() != ''
+        return
+    endif
+
+    " non modifiable windows are usually special and small, like CtrlP
+    if !&modifiable
+        return
+    endif
+
+    let num_lines = winheight(0)
     let fixline = (num_lines * g:scrollfix) / 100
 
     " normal command approach, does not work with CursorMovedI
@@ -93,7 +104,7 @@ function! ScrollFix()
     "else
         "let jump = "\<C-Y>"
         "let offset = abs(offset)
-    "endif 
+    "endif
     "let cmd = "normal! zz" . offset . jump
     "exe cmd
 
@@ -123,12 +134,12 @@ function! ScrollFix()
             let visual_top_line = fold_start
         endif
     endwhile
-    if visual_top_line != window['topline'] 
+    if visual_top_line != window['topline']
         let window['topline'] = visual_top_line
         call winrestview(window)
     endif
 
-    if g:scrollinfo 
+    if g:scrollinfo
         if !exists('b:fixline') || b:fixline != fixline
             let b:fixline = fixline
             "let save_lz = &lazyredraw
@@ -141,7 +152,7 @@ function! ScrollFix()
 endfunction
 
 " WISH:
-" XXX allow per-buffer setting , b:scrollfix 
+" XXX allow per-buffer setting , b:scrollfix
 " XXX how to handle window-resize event
 
 " Changes
