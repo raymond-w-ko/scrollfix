@@ -94,6 +94,14 @@ function! ScrollFix()
         return
     endif
 
+    if exists("b:scrollfix_has_really_long_line")
+        return
+    endif
+    if col('$') > 320
+        let b:scrollfix_has_really_long_line=1
+        return
+    endif
+
     let num_lines = winheight(0)
     let fixline = (num_lines * g:scrollfix) / 100
 
