@@ -2,8 +2,6 @@
 # Original README
 
 ```
-This is a mirror of http://www.vim.org/scripts/script.php?script_id=1649
-
 This plugin, scrollfix, maintains cursor at fixed visual line of window
 (except near beginning of file and near end of file. The
 latter is configurable. You can choose whether to fix cursor
@@ -34,4 +32,4 @@ NB:
   & install the latest vim7 executable.
 - this is beta version of the scrollfix plugin.
   Your feedback is welcome. Please send your feedback to iler at gmail dot com.
-```    
+```
