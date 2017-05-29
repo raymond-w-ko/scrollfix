@@ -1,3 +1,9 @@
+# Description
+This is a personal fork which fixes things I find problematic. The original
+version seems to have been abandoned for quite some time.
+
+# Original Author
+Yakov Lerner <iler DOT ml AT gmail DOT com>
 
 # Original README
 
