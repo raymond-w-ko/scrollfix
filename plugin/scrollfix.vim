@@ -99,9 +99,10 @@ function! <SID>ScrollFix()
   if getcmdwintype() != '' | return | endif
   if !&modifiable && &ft != "help" | return | endif
 
-  " scrollfix has been disabled for this buffer
+  " scrollfix has been disabled for this buffer since it found a line that is
+  " too long. keeping it enabled causes performance problems
   if exists("b:scrollfix_disabled") | return | endif
-  if col('$') >= 512
+  if col('$') >= 256
     let b:scrollfix_disabled=1
     return
   endif
