@@ -88,7 +88,7 @@ command! -nargs=1 SCROLLFIX :let g:scrollfix=<args>
 
 augroup scrollfix
   au!
-  au CursorMoved * :call <SID>ScrollFix()
+  au CursorMoved,CursorMovedI * :call <SID>ScrollFix()
 augroup END
 
 function! <SID>ScrollFix()
